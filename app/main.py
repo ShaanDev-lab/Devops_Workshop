@@ -77,4 +77,4 @@ def delete_task(task_id: int):
     with get_connection() as conn:
         if conn.execute("DELETE FROM task WHERE id = ?", (task_id,)).rowcount == 0:
             raise HTTPException(status_code=404, detail="Task not found")
-        return {"detail": "Task deleted"}
+        return {"detail": "Task deleted"}   
