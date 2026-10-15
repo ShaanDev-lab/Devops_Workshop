@@ -1,6 +1,20 @@
-FROM nginx:alpine
+FROM python:3.12-slim
 
-COPY index.html /usr/share/nginx/html/index.html
-EXPOSE 80
+WORKDIR /app
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+COPY requirement.txt .
+RUN pip install --no-cache-dir -r requirement.txt
+
+COPY app ./app
+COPY frontend ./frontend
+
+ENV TODO_DB_PATH=/data/todos.db
+
+RUN mkdir -p /data
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
